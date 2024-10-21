@@ -1,0 +1,198 @@
+Additions:
+  - c: 6d03a4b4c810ad2ee249f7b5d770723dc8735c86
+    t: Windows binaries are now signed with an official certification
+    p: high
+    dt: |
+      TODO
+
+  - c: 5616efcfa525809e3667e46fb048e6e199ce7511
+    t: Custom `hud.dat` is now backed up when upgrading to a new version
+    # p: high
+    dt: |
+      TODO
+
+Gameplay:
+  - c: a70e2bceb7323b48818ac502115bcbcecf333cf2
+    t: Smoke Bomb puff direction is deterministic
+    p: high
+    dt: |
+      Smoke from the Smoke Bomb of Covert Ops would previously flow into random directions on each client, causing situations where the view would be blocked for one client, but not blocked for another client.
+
+      This is now fixed by making Smoke from the Smoke Bomb deterministic and thus equal among all clients.
+
+  - c: 413addb598a250c46b285c3d910945f163dd719b
+    t: Fix Flamethrower damage being dependent on `sv_fps`
+    p: high
+    dt: |
+      Flamethrower damage was previously dependent on `sv_fps` and would cause massively more damage beyond `sv_fps 20`.
+
+      This is now fixed by making the Flamethrower damage independent of `sv_fps`.
+
+  - c: 609fdcad2e082a1b62817f55d043b928c3789931
+    t: Medic's passive heal is now deterministic (eliminates a 0-1 second random factor)
+    dt: |
+      Medics at full health would previously have a random 0-1 second delay before receiving their first passive heal tick.
+
+      They now always receive their first passive heal tick after exactly 1 second, making it deterministic.
+
+  - c: 5d6514ad7212cedf03a16483a70653328fd5881d
+    t: Diagonal medpack/ammopack throws are now possible without immediate self-pickup
+    dt: |
+      Medics and Field Ops would previously automatically pick up their packs when they throw it at a 45° Angle around them.
+
+      This is now fixed by improved pickup collision detection.
+
+  - c: 552c9aac04d5d84d73c0853a550108fe8287f26c
+    t: MG42/Browning automatically attempts to prone on 'weapalt'
+    # p: high
+    oo: 'set `cg_weapAltMgAutoProne` to `0` (default: `1`)'
+    dt: |
+      MG42/Browning would previously require proning manually before they could be deployed.
+
+      In order to bypass the need for this extra key action, which could've already been automated by a user binding, deploying an MG42/Browning now automatically tries to prone before deployment, saving a keystroke by default, similar to mortar.
+
+  - c: bbb138e7a126420cbe9dc2094233360bc0b36316
+    t: Play 'noAmmoSound' when trying to switch to an empty weapon
+    oo: 'set `cg_weapSwitchNoAmmoSounds` to `0` (default: `1`)'
+
+  - c: 23df72370d60632c898b9a5e67f7547aa1afdf7c
+    t: Gameplay sounds now also pause when the game pauses
+    p: low
+
+Visuals:
+  - c: f26fb5240038bbdc38ce7112676608c008bb1545
+    t: "'r_ext_multisample' max increase from 8 to 16"
+    p: low
+
+  - c: 1ecd6282a1987772748f91a6dbf10bbf8ab6dede
+    t: Player Float Sprites now follow heads when downed
+    oo: 'set `cg_spritesFollowHeads` to `0` (default: `1`)'
+    dt: |
+      TODO
+
+      This new feature does not affect hitboxes and is purely visual.
+
+  - c: e008043503de92f18a9273c0bd7f7f85916b203f
+    t: New Death Animations
+    dt: |
+      TODO
+
+      This change does not affect hitboxes and is purely visual.
+
+  - c: TODO
+    t: Tweaked 3P Animations
+    dtg: |
+      TODO
+
+  - c: TODO
+    t: Tweaked 1P Animations
+    dtg: |
+      TODO
+
+  - c: ???
+    t: 'Fixed gunFov regression and add ETL Dynamic Fov'
+    oo: 'set `cg_gunFov` to `75` to keep `2.82.1` behavior, or to `90` to go even further back to Vanilla ET behavior (default: `0`)'
+    dt: |
+      TODO
+
+  - c: 21f55685f8d0d3d9f9b78dd3ad0c8198f58aff49
+    t: '`cg_muzzleFlash` now supports value `2` to hide muzzle flash only for self, but keep for others'
+
+  - c: 1f0edd5237952acf816c22dba1cb375693bfee1f
+    t: New `cg_muzzleFlashScale` defaults to slightly reduced muzzle flashes
+    oo: 'set `cg_muzzleFlashScale` to `1.0` (default: `0.8`)'
+    dt: |
+      Muzzle flashes have been deemed a visiblity problem for a long time and `cg_muzzleFlash 0` was added a long time ago to allow disabling them altogether.
+
+      In order to give players more options for better visibility without giving up on game aesthetics altogether, `cg_muzzleFlashScale` is introduced to give players an option to tune them down to their own liking.
+
+      This new CVAR defaults to `0.8` to give a better default experience and caps between `0.5` and `1.0`.
+
+  - c: 58f47cd10f4b2b43bec9ad28937c9f6767c25603
+    t: New `cg_muzzleFlashDlight` to force muzzle flash dynamic light independent of `cg_muzzleFlash`
+    dt: |
+      The new `cg_muzzleFlashDlight` allows players to force the dynamic light of muzzles flashes on or off independent of `cg_muzzleFlash` has been set.
+
+      This allows for example to have the dynamic light of muzzle flashes, without the muzzle flashes themselves.
+
+      *Supported values*:
+        `0` - depend on `cg_muzzleFlash` (default)
+        `1` - force muzzle flash dynamic light off
+        `2` - force muzzle flash dynamic light on
+
+  - c: 8fcba2100bd2c46917784fd9aa42f55ce4f3bdea
+    t: Fix smoke bomb sprites not fading out correctly
+    p: low
+  # ...
+
+HUD:
+  - c: f4e19c1b1b14b95544e787f13c23f456cfb2f59a
+    t: Hotkeys for navigating limbo
+    p: high
+    dt: |
+      TODO Briefly describe how they work
+
+  - c: 7b8bc08cbbfdcfde4e41b42b56b802abfdc3214e
+    t: New HUD chargebar needle
+    oo: uncheck `Needle` on `weaponchargebar` in HUD Editor
+    dt: |
+      TODO
+
+  - c: e41180623b98125f99c0c83f283c67fea46d947b
+    t: Add 'Dynamic Heat Color' option to `weaponicon` Component
+    p: low
+    oo: uncheck `Dynamic Heat Color` on `weaponicon` in HUD Editor
+    dt: |
+      TODO
+
+  - c: 97acbd37440426f234c38633eb22c59dd00a2b47
+    t: New crosshair variations
+    p: ???
+
+  - c: 985be0937096a8b7b1d56d1a242e15459d819882
+    t: Clampmap some UI sprites TODO
+    p: low
+
+  - c: 7799749fb2a45b877511c8e342f36cdea7cbaa67
+    t: Health bars and names are now drawn when downed
+    p: low
+
+  - c: df4e7b62936e4f2f050ff0e6f00ecef79c80c9d5
+    t: '`cg_commandMapTime` now defaults to `0`'
+    oo: 'set `cg_commandMapTime` to `250` (default: `0`)'
+    dt: |
+      The 'Show Command Map' (`+mapexpand`) action now pops the map in immediately by default instead of slowly blending in from the side with a delay.
+
+Backend:
+  - c: 64c4239a01ddc0447fafc89ac04465b91ee0e525
+    t: New `r_debugShaderSurfaceFlags` to visually highlight surfaces with specified surface flags
+    p: low
+    dt: |
+      TODO
+
+  - c: 29b791449cdf05760744198e7c8b33a008425181
+    t: Support `g_forcespawn` value `-1` to enable instant respawning for both teams
+    p: low
+
+  - c: 602eb1a2462067bfffdd4d1e2c3d840683849072
+    t: New `cg_autoCmd` to automatically execute a set command when joining a game or when the map restarts
+    p: low
+    dt: |
+      This allows for example to auto-join a team and class on game start from the command line:
+      ```
+      <etl-game> +set cg_autoCmd "team Allied 3 8 37;cg_thirdPerson 1;cg_thirdPersonAngle 180" +devmap battery
+      ```
+
+  - c: 78d7745576ce0cb0278a8082520b9a16b8fbcfb2
+    t: Add new 'benchmark' command
+    p: low
+    dt: |
+      TODO
+
+  - c: 398fb9e7c5c00ede5d051a97707a755075b984c6
+    t: Warmup can now be disabled via `g_warmup 0`
+    p: low
+
+  - c: 577e0c4dfffca59773faee7c12c1e61a17af14f7
+    t: New com_maxfpsMinimized / com_maxfpsUnfocused CVARs
+    p: low
