@@ -1,179 +1,263 @@
-Additions:
+General:
   - c: 6d03a4b4c810ad2ee249f7b5d770723dc8735c86
     t: Windows binaries are now signed with an official certification
     p: high
+  - t: ETLTV Improvements
+    p: high
     dt: |
-      TODO
+      ETLTV now supports LUA alongside with many other improvements.  
+      [See the full changelog here](https://github.com/etlegacy/etlegacy-docs/edit/master/etltv.rst)
 
-  - c: 5616efcfa525809e3667e46fb048e6e199ce7511
-    t: Custom `hud.dat` is now backed up when upgrading to a new version
-    # p: high
+      It has been successfully used to broadcast [Nations Cup 2024](https://www.gamestv.org/league/1755-et-legacy-nations-cup-2024/) matches.
+
+      (A **huge** thanks to Ryzyk for his amazing efforts on these matters!)
+  - t: Added new 'video-pipe' command to pipe game footage to ffmpeg
     dt: |
-      TODO
+       Pipes game footage to ffmpeg for video recording. 
 
+       If ffmpeg isn't part of your PATH environment variable, the executable must be placed next to the etl binary.
 Gameplay:
+  - c: 413addb598a250c46b285c3d910945f163dd719b
+    t: Fix Flamethrower damage being dependent on 'sv_fps'
+    p: high
+    dt: |
+      Flamethrower damage was previously dependent on 'sv_fps' and would cause massively more damage beyond 'sv_fps 20'.
+
+      This is now fixed by making the Flamethrower damage independent of 'sv_fps'.
   - c: a70e2bceb7323b48818ac502115bcbcecf333cf2
-    t: Smoke Bomb puff direction is deterministic
+    t: Smoke Bomb puffs are now deterministic
     p: high
     dt: |
       Smoke from the Smoke Bomb of Covert Ops would previously flow into random directions on each client, causing situations where the view would be blocked for one client, but not blocked for another client.
 
       This is now fixed by making Smoke from the Smoke Bomb deterministic and thus equal among all clients.
-
-  - c: 413addb598a250c46b285c3d910945f163dd719b
-    t: Fix Flamethrower damage being dependent on `sv_fps`
-    p: high
-    dt: |
-      Flamethrower damage was previously dependent on `sv_fps` and would cause massively more damage beyond `sv_fps 20`.
-
-      This is now fixed by making the Flamethrower damage independent of `sv_fps`.
-
   - c: 609fdcad2e082a1b62817f55d043b928c3789931
-    t: Medic's passive heal is now deterministic (eliminates a 0-1 second random factor)
+    t: Medic's passive heal is now deterministic
     dt: |
       Medics at full health would previously have a random 0-1 second delay before receiving their first passive heal tick.
 
       They now always receive their first passive heal tick after exactly 1 second, making it deterministic.
-
   - c: 5d6514ad7212cedf03a16483a70653328fd5881d
     t: Diagonal medpack/ammopack throws are now possible without immediate self-pickup
     dt: |
       Medics and Field Ops would previously automatically pick up their packs when they throw it at a 45° Angle around them.
 
       This is now fixed by improved pickup collision detection.
-
   - c: 552c9aac04d5d84d73c0853a550108fe8287f26c
     t: MG42/Browning automatically attempts to prone on 'weapalt'
-    # p: high
-    oo: 'set `cg_weapAltMgAutoProne` to `0` (default: `1`)'
     dt: |
       MG42/Browning would previously require proning manually before they could be deployed.
 
       In order to bypass the need for this extra key action, which could've already been automated by a user binding, deploying an MG42/Browning now automatically tries to prone before deployment, saving a keystroke by default, similar to mortar.
-
+    oo: 'set `cg_weapAltMgAutoProne` to `0` (default: `1`)'
   - c: bbb138e7a126420cbe9dc2094233360bc0b36316
     t: Play 'noAmmoSound' when trying to switch to an empty weapon
-    oo: 'set `cg_weapSwitchNoAmmoSounds` to `0` (default: `1`)'
+    dt: |
+      Attempting to switch to a weapon which is out of ammo would previously fail without any sound or visual cue.
 
+      The 'noAmmoSound' is now being played as a sound cue.
+    oo: 'set `cg_weapSwitchNoAmmoSounds` to `0` (default: `1`)'
   - c: 23df72370d60632c898b9a5e67f7547aa1afdf7c
     t: Gameplay sounds now also pause when the game pauses
     p: low
+  - c: e86fb885894b904552bee98473d6921c97a9d346
+    t: Disambiguate weapon bank collisions
+    dt: |
+      This change disambiguates some weapon bank collisions:
 
+      - A Soldier with SMG Perk having both an SMG and a heavy weapon.
+
+        For such cases '2' will now select the SMG, '3' will select the
+        heavy weapon.
+
+      - A Soldier with SMG Perk having 2 SMGs
+
+        For such cases '2' will now select your team's SMG, '3' will select
+        the other team's SMG.
+    oo: 'set `cg_weapBankCollisions` to `1` (default: `0`)'
 Visuals:
   - c: f26fb5240038bbdc38ce7112676608c008bb1545
     t: "'r_ext_multisample' max increase from 8 to 16"
     p: low
+  - c: 73c728186dc2f16d42828e8fc38e96be0236ea3a
+    t: 'Fixed gunFovOffset regression and add ETL Dynamic Fov Offset'
+    p: high
+    dt: |
+      We introduced a regression in a previous release, where first person weapon models accidentally ended up being put too low in relation to the player view.
 
+      We have fixed this regression and introduced a new default ETL Dynamic Fov Offset feature, which now ships defaults that aim to have consistent gun offsets across different 'cg_fov' values.
+
+      These new defaults also aim to ship good default first person weapon visibility and consistency between the same weapon kinds of the 2 teams, while staying true to the original weapon look.  
+      (e.g. the MP40 now should roughly occupy the same screenspace as the Thompson when reloading)
+
+      This also brings back guns, like the Panzerfaust, more to the forefront when it was accidentally previously cut short, without significantly obstructing visibility.
+    oo: 'set `cg_gunFov` to `75` to keep `2.82.1` behavior, or to `90` to go even further back to Vanilla ET behavior (default: `0`)'
+  - c: a52a594e1856271088b184841c7b6eba21f028d8
+    t: Tweaked Character Animations
+    dt: |
+      Character animations have been slightly tweaked and reframed, to better represent playerstate and playeractions and to increase visibility in some instances.
+
+      Death animations have been revamped to allow better visibility.
+
+      Reload animations now better fit the weapon reload duration.
+
+      Jump animations now are able to support animation transition, when they didn't before.
+
+      Deploying/Undeploying an MG42 now plays a character animation.
+
+      Firing animations don't persist despite the player having stopped firing.
+
+      Alongside other small changes.
   - c: 1ecd6282a1987772748f91a6dbf10bbf8ab6dede
     t: Player Float Sprites now follow heads when downed
-    oo: 'set `cg_spritesFollowHeads` to `0` (default: `1`)'
     dt: |
-      TODO
+      Player float sprites, like the revive icon that Medics see for their teammates, now track the head position instead of being placed immediately at a fixed height, which would clip inside the body during the first half of the death animation.
 
       This new feature does not affect hitboxes and is purely visual.
-
-  - c: e008043503de92f18a9273c0bd7f7f85916b203f
-    t: New Death Animations
-    dt: |
-      TODO
-
-      This change does not affect hitboxes and is purely visual.
-
-  - c: TODO
-    t: Tweaked 3P Animations
-    dtg: |
-      TODO
-
-  - c: TODO
-    t: Tweaked 1P Animations
-    dtg: |
-      TODO
-
+    oo: 'set `cg_spritesFollowHeads` to `0` (default: `1`)'
   - c: ???
-    t: 'Fixed gunFov regression and add ETL Dynamic Fov'
-    oo: 'set `cg_gunFov` to `75` to keep `2.82.1` behavior, or to `90` to go even further back to Vanilla ET behavior (default: `0`)'
+    t: Tweaked First-Person Weapons
     dt: |
-      TODO
+      Weapon animations have been reframed to more accurately reflect the duration of the weaponstate in instances where animations like reload would be interrupted or transition to soon to the IDLE animation despite still reloading.
 
-  - c: 21f55685f8d0d3d9f9b78dd3ad0c8198f58aff49
-    t: '`cg_muzzleFlash` now supports value `2` to hide muzzle flash only for self, but keep for others'
+      Weapon parts have been realigned to reduce graphical glitches, where parts would hover or flick around the screen due to unclean animation frames.
 
-  - c: 1f0edd5237952acf816c22dba1cb375693bfee1f
-    t: New `cg_muzzleFlashScale` defaults to slightly reduced muzzle flashes
-    oo: 'set `cg_muzzleFlashScale` to `1.0` (default: `0.8`)'
+      In some instances models like hands were extended to not reveal clipped length at widescreen or higher 'cg_fovs'.
+  - c: 69af71b050b3759f6b95ef646d58785b92470dab
+    t: Tweak muzzle flash sizes
     dt: |
-      Muzzle flashes have been deemed a visiblity problem for a long time and `cg_muzzleFlash 0` was added a long time ago to allow disabling them altogether.
+      Muzzles flashes have been frequently completely disabled (via 'cg_muzzleFlash 0') in the past, as they have been shipped dramatically oversized with little transparency and thus heavily obstructed visibility.
 
-      In order to give players more options for better visibility without giving up on game aesthetics altogether, `cg_muzzleFlashScale` is introduced to give players an option to tune them down to their own liking.
-
-      This new CVAR defaults to `0.8` to give a better default experience and caps between `0.5` and `1.0`.
-
-  - c: 58f47cd10f4b2b43bec9ad28937c9f6767c25603
-    t: New `cg_muzzleFlashDlight` to force muzzle flash dynamic light independent of `cg_muzzleFlash`
+      We now ship a revamped set of default values with much improved visibility so that players are not incentivized to disable them in order to gain an advantage.
+    oo: 'set `cg_muzzleFlashOld` to `1` (default: `0`)'
+  - c: 78d5775690cbe4b8c60c159143279f3b9c11d717
+    t: Changed 'Geometric Detail' from 'r_lodbias' to 'r_lodscale'
     dt: |
-      The new `cg_muzzleFlashDlight` allows players to force the dynamic light of muzzles flashes on or off independent of `cg_muzzleFlash` has been set.
+      The 'Geometric Detail' menu option previously made little difference and on highest option still caused needless polygon pop-in on character models
 
-      This allows for example to have the dynamic light of muzzle flashes, without the muzzle flashes themselves.
-
-      *Supported values*:
-        `0` - depend on `cg_muzzleFlash` (default)
-        `1` - force muzzle flash dynamic light off
-        `2` - force muzzle flash dynamic light on
-
-  - c: 8fcba2100bd2c46917784fd9aa42f55ce4f3bdea
-    t: Fix smoke bomb sprites not fading out correctly
+      The underlying CVAR has been changed to better reflect the available options.
+  - c: ece71b77ccb147fa7cad1f61ad9fbe788bd1ea8c
+    t: Move drawing airplanes into new 'cg_drawAirstrikePlanes'
     p: low
-  # ...
+    dt: |
+      Drawing airplanes used to be part of `cg_visualEffects`, which however
+      has been forced off on many servers due to how visuall obtrusive and fps
+      dependent/uneven especially smoke effects are.
+
+      Airplanes were added behind `cg_visualEffects` and got thus practically
+      disabled by default.
+
+      However, as they are unobtrusive, practically free from a performance
+      stnadpoint and even provide some historic info on where airstrikes
+      previously happened, they are now split into a separate CVAR so that
+      servers can decide to keep them while still getting rid of the particle
+      effects of `cg_visualEffects`.
+    oo: 'set `cg_drawAirstrikePlanes` to `0` (default: `1`)'
+# ...
 
 HUD:
+  - t: Various HUD QoL improvement
+    dt: |
+      Big thanks to the community for all the feedback!
+
+      See [the full documentation](https://github.com/etlegacy/etlegacy-docs/blob/master/hudeditor.rst) for details.
+  - c: 5616efcfa525809e3667e46fb048e6e199ce7511
+    t: Custom 'hud.dat' is now backed up when upgrading to a new version
+  - c: d65775dedb1ab5ffc388046149f4be67ddfa43d2
+    p: high
+    t: Added Sharp Custom Crosshairs
+    dt: |
+      A new set of "vectorized"/sharp crosshairs have been added.
+
+      They replace previous crosshair implementations via 'cg_customCrosshair 1-4' and are configurable via a set of 'cg_customCrosshair*' CVARs.
+
+      Depending on player feedback, we plan to further improve them and to eventually wrap a Crosshair Editor around them in the future.
+
+      [Documentation on the CVARs](https://github.com/etlegacy/etlegacy/wiki/Changelog#:~:text=cg_customCrosshair)
   - c: f4e19c1b1b14b95544e787f13c23f456cfb2f59a
     t: Hotkeys for navigating limbo
     p: high
     dt: |
-      TODO Briefly describe how they work
+      The limbo menu is now traversable via keyboard hotkeys:
 
+      **Team Selection**  
+      1 - Team Axis  
+      2 - Team Allied  
+      3 - Spectator  
+
+      **Class Selection**  
+      e - Engineer  
+      c - Covert Ops  
+      f - Field Ops  
+      m - Medic  
+      s - Soldier  
+
+      **Weapon Selection**  
+      TAB      - Switch between Primary and Secondary Weapon Panel  
+      Spacebar - Toggle Weapon Panel  
+      1-9      - When Weapon Panel is opened, select weapon matching weapon index  
+
+      **Confirming/Cancelling**  
+      y/z/Return - Confirm (OK)  
+      Escape     - Cancel  
   - c: 7b8bc08cbbfdcfde4e41b42b56b802abfdc3214e
-    t: New HUD chargebar needle
-    oo: uncheck `Needle` on `weaponchargebar` in HUD Editor
+    t: New HUD 'chargebar'/'healthbar' needle
     dt: |
-      TODO
+      Both 'chargebar' and 'healthbar' gained a new needle indicator.
 
+      For 'chargebar' the needle indicates how much of the bar will be consumed by a given weapon.
+
+      For 'healthbar' the needle indicates the HP bonus that is granted from the amount of medics in your team.
+    oo: uncheck `Needle` on `weaponchargebar`/`healthbar` in HUD Editor
+  - c: d05d3df0ffd5640f18f824e9093d59a16e48fc7f
+    t: Add kill assist system to the 'xpgain' component
   - c: e41180623b98125f99c0c83f283c67fea46d947b
     t: Add 'Dynamic Heat Color' option to `weaponicon` Component
     p: low
-    oo: uncheck `Dynamic Heat Color` on `weaponicon` in HUD Editor
     dt: |
-      TODO
+      The background color that indicates heat on 'weaponicon' now by default changes color depending on it's percentage.
+    oo: uncheck `Dynamic Heat Color` on `weaponicon` in HUD Editor
+  - c: ed5fc2e105475c8f3e7fa956568fb71536793b24
+    t: Class Limbo Selection now requires confirmation
+    dt: |
+      Selecting a class in the Limbo menu would previously automatically confirm the loadout.
 
-  - c: 97acbd37440426f234c38633eb22c59dd00a2b47
-    t: New crosshair variations
-    p: ???
-
+      In order to be able to look up the availability of weapons (e.g. Panzerfaust) without automatically switching to the class, selecting a class now only takes effect when the loadout is confimed via `OK` (or one of the new Limbo hotkeys: `y`/`z`/`Enter`).
+    oo: 'set `cg_limboClassClickConfirm` to `0` (default: `1`)'
   - c: 985be0937096a8b7b1d56d1a242e15459d819882
-    t: Clampmap some UI sprites TODO
+    t: Clampmap some UI sprites
     p: low
-
   - c: 7799749fb2a45b877511c8e342f36cdea7cbaa67
     t: Health bars and names are now drawn when downed
     p: low
-
   - c: df4e7b62936e4f2f050ff0e6f00ecef79c80c9d5
     t: '`cg_commandMapTime` now defaults to `0`'
     oo: 'set `cg_commandMapTime` to `250` (default: `0`)'
+    p: low
     dt: |
       The 'Show Command Map' (`+mapexpand`) action now pops the map in immediately by default instead of slowly blending in from the side with a delay.
+  - c: a51fb9afb1c068858fc46ad7f2280b47b5557b93
+    t: "'F7' by default now toggles the HUD Editor."
+  - c: 2fcccc649f8c323d218f76e0433f955106cf8172
+    t: Add various HUD Editor hotkeys (#2926)
+    p: low
+    dt: |
+      * `t`               - hotkey toggles showing only the focused component
+      * `v`               - hotkey toggles visibility of focused component
+      * `alt + mwheel`    - changes scale/text size instead of component size
+      * `alt + shift + v` - sets all components visible
 
-Backend:
+      Also move the help text more upwards, as it starts to run the risk of
+      going out of bounds when fullscreening.
+# Unsorted/Low (All p: low are skipped for now):
   - c: 64c4239a01ddc0447fafc89ac04465b91ee0e525
     t: New `r_debugShaderSurfaceFlags` to visually highlight surfaces with specified surface flags
     p: low
     dt: |
       TODO
-
   - c: 29b791449cdf05760744198e7c8b33a008425181
     t: Support `g_forcespawn` value `-1` to enable instant respawning for both teams
     p: low
-
   - c: 602eb1a2462067bfffdd4d1e2c3d840683849072
     t: New `cg_autoCmd` to automatically execute a set command when joining a game or when the map restarts
     p: low
@@ -182,17 +266,14 @@ Backend:
       ```
       <etl-game> +set cg_autoCmd "team Allied 3 8 37;cg_thirdPerson 1;cg_thirdPersonAngle 180" +devmap battery
       ```
-
   - c: 78d7745576ce0cb0278a8082520b9a16b8fbcfb2
     t: Add new 'benchmark' command
     p: low
     dt: |
       TODO
-
   - c: 398fb9e7c5c00ede5d051a97707a755075b984c6
     t: Warmup can now be disabled via `g_warmup 0`
     p: low
-
   - c: 577e0c4dfffca59773faee7c12c1e61a17af14f7
     t: New com_maxfpsMinimized / com_maxfpsUnfocused CVARs
     p: low

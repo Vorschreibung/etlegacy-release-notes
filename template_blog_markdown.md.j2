@@ -1,0 +1,13 @@
+{%- for category, items in data.items() %}
+### {{ category }}
+{%- for item in items if not item.p == "low" %}
+##### {{ loop.index }}. {{ "**" + item.t + "**" if item.p == "high" else "" + item.t + "" if item.p == "low" else "*" + item.t + "*" }}
+{%- if item.dt %}
+{{ item.dt.splitlines() | map("strformat", "> %s") | join("\n") }}
+{%- endif -%}
+{%- if item.oo %}
+
+> `To opt out {{ item.oo | replace("`", "'") }}`
+{%- endif %}
+{%- endfor %}
+{%- endfor %}
